@@ -13,7 +13,11 @@ class OrderSummary extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return Container(
+      decoration: BoxDecoration(
+        color: Color(0xff93C22F),
+        borderRadius: BorderRadius.circular(15),
+      ),
       margin: EdgeInsets.symmetric(vertical: 8.0),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -27,14 +31,21 @@ class OrderSummary extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text('Order'),
-                Text('\$$orderTotal'),
+                Text(
+                  '\Rs $orderTotal',
+                  style: TextStyle(color: Colors.white),
+                ),
               ],
             ),
+            Divider(),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text('Delivery'),
-                Text('\$$deliveryFee'),
+                Text(
+                  '\Rs $deliveryFee',
+                  style: TextStyle(color: Colors.white),
+                ),
               ],
             ),
             Divider(),
@@ -44,9 +55,11 @@ class OrderSummary extends StatelessWidget {
                 Text('Total',
                     style:
                         TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                Text('\$$total',
-                    style:
-                        TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                Text('\Rs $total',
+                    style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold)),
               ],
             ),
           ],

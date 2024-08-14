@@ -4,11 +4,13 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 
 class AppPadding {
   static EdgeInsetsGeometry get screenHorizontalPadding {
-    return EdgeInsets.symmetric(horizontal: 2.w);
+    return EdgeInsets.symmetric(horizontal: 3.w);
   }
+
+  static screenPadding(param0, {required Column child}) {}
 }
 
-const Duration pageTransitionDuration = Duration(milliseconds: 100);
+const Duration pageTransitionDuration = Duration(milliseconds: 10);
 
 class AppStyle {
   static TextStyle heading1() {

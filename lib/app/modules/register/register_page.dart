@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:organicbazzar/app/config/colors.dart';
 import 'package:organicbazzar/app/config/style.dart';
+import 'package:organicbazzar/app/modules/privicy_policy/privicy_policy.dart';
 import 'package:organicbazzar/app/modules/register/register_controller.dart';
+import 'package:organicbazzar/app/modules/register/terms_and_condition.dart';
 import 'package:organicbazzar/app/widget/custom_button.dart';
 import 'package:organicbazzar/app/widget/loading_widget.dart';
 import 'package:organicbazzar/app/widget/text_form_field.dart';
@@ -35,191 +37,219 @@ class RegisterView extends StatelessWidget {
                 },
               ),
             ),
-            body: SingleChildScrollView(
-                child: Column(
+            body: Stack(
               children: [
-                WelcomeHeading(
-                    mainHeading: "Create an Account", subHeading: ''),
-                SizedBox(
-                  height: 1.h,
-                ),
-                Padding(
+                SingleChildScrollView(
+                    child: Padding(
                   padding: AppPadding.screenHorizontalPadding,
-                  child: Form(
-                    key: registercontroller.formKey,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        TextFormFieldWidget(
-                          prefixIcon: const Icon(Icons.person),
-                          textInputType: TextInputType.text,
-                          hintText: 'Name',
-                          controller: registercontroller.nameController,
-                          validatorFunction: (value) {
-                            if (value.isEmpty) {
-                              return '  Name Can\'t be empty';
-                            }
-                            return null;
-                          },
-                          actionKeyboard: TextInputAction.next,
-                          onSubmitField: () {},
-                        ),
-                        SizedBox(height: 2.h),
-                        TextFormFieldWidget(
-                          prefixIcon: const Icon(Icons.email),
-                          textInputType: TextInputType.emailAddress,
-                          hintText: 'Email',
-                          controller: registercontroller.emailController,
-                          validatorFunction: (value) {
-                            if (value.isEmpty) {
-                              return 'Email Name Can\'t be empty';
-                            }
-
-                            return null;
-                          },
-                          actionKeyboard: TextInputAction.next,
-                          onSubmitField: () {},
-                        ),
-                        SizedBox(height: 2.h),
-                        TextFormFieldWidget(
-                          prefixIcon: const Icon(Icons.maps_home_work_sharp),
-                          textInputType: TextInputType.emailAddress,
-                          hintText: 'Address',
-                          controller: registercontroller.addressController,
-                          validatorFunction: (value) {
-                            if (value.isEmpty) {
-                              return 'Address Can\'t be empty';
-                            }
-
-                            return null;
-                          },
-                          actionKeyboard: TextInputAction.next,
-                          onSubmitField: () {},
-                        ),
-                        SizedBox(height: 2.h),
-                        TextFormFieldWidget(
-                          prefixIcon: const Icon(Icons.phone),
-                          textInputType: TextInputType.number,
-                          hintText: 'Mobile Number',
-                          controller: registercontroller.mobileNumberController,
-                          validatorFunction: (value) {
-                            if (value.isEmpty) {
-                              return 'Mobile number Can\'t be empty';
-                            }
-                            if (value.length < 10) {
-                              return 'Mobile number must contain  10 character';
-                            }
-                            return null;
-                          },
-                          actionKeyboard: TextInputAction.next,
-                          onSubmitField: () {},
-                        ),
-                        SizedBox(height: 2.h),
-                        Obx(
-                          () => TextFormFieldWidget(
-                            prefixIcon: const Icon(Icons.lock),
-                            textInputType: TextInputType.visiblePassword,
-                            hintText: 'Password',
-                            controller: registercontroller.passwordController,
-                            obscureText:
-                                !registercontroller.ispasswordvisible.value,
-                            suffixIcon: IconButton(
-                              onPressed: () {
-                                registercontroller.ispasswordvisible.value =
-                                    !registercontroller.ispasswordvisible.value;
-                              },
-                              icon: Icon(
-                                registercontroller.ispasswordvisible.value
-                                    ? Icons.visibility_outlined
-                                    : Icons.visibility_off_outlined,
-                              ),
-                            ),
-                            validatorFunction: (value) {
-                              if (value.isEmpty) {
-                                return 'Enter the password';
-                              }
-                              if (value.length < 8) {
-                                return 'Password must contain atleast 8 character';
-                              }
-                              return null;
-                            },
-                            actionKeyboard: TextInputAction.next,
-                            onSubmitField: () {},
-                          ),
-                        ),
-                        SizedBox(height: 2.h),
-                        SizedBox(
-                          height: 2.h,
-                        ),
-                        Obx(
-                          () => Row(
+                  child: Column(
+                    children: [
+                      WelcomeHeading(
+                          mainHeading: "Create an Account", subHeading: ''),
+                      SizedBox(
+                        height: 1.h,
+                      ),
+                      Padding(
+                        padding: AppPadding.screenHorizontalPadding,
+                        child: Form(
+                          key: registercontroller.formKey,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              SizedBox(
-                                width: 10.w,
-                                child: Checkbox(
-                                  fillColor:
-                                      MaterialStateProperty.resolveWith<Color?>(
-                                          (Set<MaterialState> states) {
-                                    return Colors
-                                        .white; // Change this to the default color you want.
-                                  }),
-                                  checkColor: AppColor.backgroundColor,
-                                  focusColor: AppColor.buttonColor,
-                                  value: registercontroller
-                                      .termsandcondition.value,
-                                  onChanged: (value) {
-                                    registercontroller.termsandcondition.value =
-                                        !registercontroller
-                                            .termsandcondition.value;
+                              TextFormFieldWidget(
+                                prefixIcon: const Icon(Icons.person),
+                                textInputType: TextInputType.text,
+                                hintText: 'Name',
+                                controller: registercontroller.nameController,
+                                validatorFunction: (value) {
+                                  if (value.isEmpty) {
+                                    return '  Name Can\'t be empty';
+                                  }
+                                  return null;
+                                },
+                                actionKeyboard: TextInputAction.next,
+                                onSubmitField: () {},
+                              ),
+                              SizedBox(height: 2.h),
+                              TextFormFieldWidget(
+                                prefixIcon: const Icon(Icons.email),
+                                textInputType: TextInputType.emailAddress,
+                                hintText: 'Email',
+                                controller: registercontroller.emailController,
+                                validatorFunction: (value) {
+                                  if (value.isEmpty) {
+                                    return 'Email  Can\'t be empty';
+                                  }
+
+                                  return null;
+                                },
+                                actionKeyboard: TextInputAction.next,
+                                onSubmitField: () {},
+                              ),
+                              SizedBox(height: 2.h),
+                              TextFormFieldWidget(
+                                prefixIcon: const Icon(Icons.location_city),
+                                textInputType: TextInputType.emailAddress,
+                                hintText: 'Address',
+                                controller:
+                                    registercontroller.addressController,
+                                validatorFunction: (value) {
+                                  if (value.isEmpty) {
+                                    return 'Address Can\'t be empty';
+                                  }
+
+                                  return null;
+                                },
+                                actionKeyboard: TextInputAction.next,
+                                onSubmitField: () {},
+                              ),
+                              SizedBox(height: 2.h),
+                              TextFormFieldWidget(
+                                prefixIcon: const Icon(Icons.phone),
+                                textInputType: TextInputType.number,
+                                hintText: 'Mobile Number',
+                                controller:
+                                    registercontroller.mobileNumberController,
+                                validatorFunction: (value) {
+                                  if (value.isEmpty) {
+                                    return 'Mobile number Can\'t be empty';
+                                  }
+                                  if (value.length < 10) {
+                                    return 'Mobile number must contain  10 character';
+                                  }
+                                  return null;
+                                },
+                                actionKeyboard: TextInputAction.next,
+                                onSubmitField: () {},
+                              ),
+                              SizedBox(height: 2.h),
+                              Obx(
+                                () => TextFormFieldWidget(
+                                  prefixIcon: const Icon(Icons.lock),
+                                  textInputType: TextInputType.visiblePassword,
+                                  hintText: 'Password',
+                                  controller:
+                                      registercontroller.passwordController,
+                                  obscureText: !registercontroller
+                                      .ispasswordvisible.value,
+                                  suffixIcon: IconButton(
+                                    onPressed: () {
+                                      registercontroller
+                                              .ispasswordvisible.value =
+                                          !registercontroller
+                                              .ispasswordvisible.value;
+                                    },
+                                    icon: Icon(
+                                      registercontroller.ispasswordvisible.value
+                                          ? Icons.visibility_outlined
+                                          : Icons.visibility_off_outlined,
+                                    ),
+                                  ),
+                                  validatorFunction: (value) {
+                                    if (value.isEmpty) {
+                                      return 'Enter the password';
+                                    }
+                                    if (value.length < 8) {
+                                      return 'Password must contain atleast 8 character';
+                                    }
+                                    return null;
                                   },
+                                  actionKeyboard: TextInputAction.next,
+                                  onSubmitField: () {},
                                 ),
                               ),
+                              SizedBox(height: 2.h),
                               SizedBox(
-                                width: 70.w,
-                                child: RichText(
-                                  maxLines: 4,
-                                  text: TextSpan(
-                                    text: "I have read and agreed to the ",
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 16.sp,
-                                      fontWeight: FontWeight.w500,
+                                height: 2.h,
+                              ),
+                              Obx(
+                                () => Row(
+                                  children: [
+                                    SizedBox(
+                                      width: 10.w,
+                                      child: Checkbox(
+                                        fillColor: MaterialStateProperty
+                                            .resolveWith<Color?>(
+                                                (Set<MaterialState> states) {
+                                          return Colors
+                                              .white; // Change this to the default color you want.
+                                        }),
+                                        checkColor: const Color.fromARGB(
+                                            255, 20, 23, 23),
+                                        focusColor: AppColor.buttonColor,
+                                        value: registercontroller
+                                            .termsandcondition.value,
+                                        onChanged: (value) {
+                                          registercontroller
+                                                  .termsandcondition.value =
+                                              !registercontroller
+                                                  .termsandcondition.value;
+                                        },
+                                      ),
                                     ),
-                                    children: [
-                                      TextSpan(
-                                        text: "Terms and Conditions",
-                                        style: TextStyle(
-                                          fontSize: 16.sp,
-                                          decoration: TextDecoration.underline,
-                                          color: Theme.of(context).primaryColor,
+                                    SizedBox(
+                                      width: 70.w,
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          Get.to(
+                                              () => TermsAndConditionsPage(
+                                                    onAccept: () {},
+                                                  ),
+                                              transition:
+                                                  Transition.cupertinoDialog);
+                                        },
+                                        child: RichText(
+                                          maxLines: 4,
+                                          text: TextSpan(
+                                            text:
+                                                "I have read and agreed to the ",
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 16.sp,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                            children: [
+                                              TextSpan(
+                                                text: "Terms and Conditions",
+                                                style: TextStyle(
+                                                  fontSize: 16.sp,
+                                                  decoration:
+                                                      TextDecoration.underline,
+                                                  color: Theme.of(context)
+                                                      .primaryColor,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
+                              ),
+                              CustomButton(
+                                buttonColor: AppColor.primaryColor,
+                                textColor: AppColor.backgroundColor,
+                                text: "Register",
+                                onPressed: () {
+                                  FocusScope.of(context).unfocus();
+                                  registercontroller.registerUser(context);
+                                },
+                                isLoading: false,
+                              ),
+                              const SizedBox(
+                                height: 10,
                               ),
                             ],
                           ),
                         ),
-                        CustomButton(
-                          buttonColor: AppColor.buttonColor,
-                          textColor: AppColor.backgroundColor,
-                          text: "Register",
-                          onPressed: () {
-                            FocusScope.of(context).unfocus();
-                          },
-                          isLoading: false,
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ),
+                )),
               ],
-            ))),
-        Obx(() => registercontroller.isloading.value
+            )),
+        Obx(() => registercontroller.isregisterLoading.value
             ? Positioned(
                 left: 40.w, top: 50.h, child: Center(child: LoadingWidget()))
             : SizedBox.shrink())

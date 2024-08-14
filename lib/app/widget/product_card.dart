@@ -1,21 +1,24 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:organicbazzar/app/config/colors.dart';
+import 'package:organicbazzar/app/config/api_endpoint.dart';
 import 'package:organicbazzar/app/config/style.dart';
+import 'package:organicbazzar/app/model/cart_response_model.dart';
+import 'package:organicbazzar/app/model/produc_response.dart';
 import 'package:organicbazzar/app/modules/cart/cart_controller.dart';
-import 'package:organicbazzar/app/modules/home/product_list.dart';
 import 'package:organicbazzar/app/modules/product_details/product_detail.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:shimmer/shimmer.dart';
 
 class ProductCard extends StatelessWidget {
-  final Product product;
-  final bool isShadow;
+  final ProductResponse product;
+
   ProductCard({
-    super.key,
+    Key? key,
     required this.product,
-    this.isShadow = true,
-  });
+  }) : super(key: key);
   final cartController = Get.put(CartController());
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -27,95 +30,181 @@ class ProductCard extends StatelessWidget {
         );
       },
       child: Container(
-        margin: EdgeInsets.only(right: 3.w),
-        width: 160,
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(15),
-          boxShadow: isShadow
-              ? [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    blurRadius: 10,
-                    spreadRadius: 2,
-                    offset: Offset(0, 5),
-                  ),
-                ]
-              : [], // No shadow if isShadow is false
+          border: Border.all(
+              color: const Color.fromARGB(
+                  255, 202, 202, 202)), // Light grey-black border color
+          borderRadius: BorderRadius.circular(10.0),
         ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
             ClipRRect(
               borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
-              child: Image.network(
-                product.imageUrl, // Replace with your image link
+              child: CachedNetworkImage(
+                imageUrl: ApiEndpoints.baseUrl + product.filePath,
                 height: 120,
                 width: 199,
                 fit: BoxFit.fill,
+                placeholder: (context, url) => Shimmer.fromColors(
+                  baseColor: Colors.grey[300]!,
+                  highlightColor: Colors.grey[100]!,
+                  child: Container(
+                    height: 120,
+                    width: 199,
+                    color: Colors.white,
+                  ),
+                ),
+                errorWidget: (context, url, error) => Image.asset(
+                  'assets/placeholder.png',
+                  height: 120,
+                  width: 199,
+                  fit: BoxFit.fill,
+                ),
               ),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Text(
-                product.name,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    'Rs.${product.price}/1kg',
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    product.name,
+                    overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.grey,
+                      fontWeight: FontWeight.w400,
+                      fontSize: 16.0,
                     ),
                   ),
-                ),
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: Container(
-                    height: 50, // Adjust the height as needed
-                    width: 10.w, // Adjust the width as needed
-                    decoration: const BoxDecoration(
-                      color: AppColor.buttonColor,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(15),
-                        bottomRight: Radius.circular(15),
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black12,
-                          blurRadius: 6,
-                          offset: Offset(0, 2),
+                  Row(
+                    children: [
+                      Text(
+                        'Rs.${product.price}',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          color: Colors.green,
+                          fontSize: 16.0.sp,
                         ),
-                      ],
-                    ),
-                    child: IconButton(
-                      icon: Icon(Icons.add,
-                          color: const Color.fromARGB(255, 255, 255, 255)),
-                      onPressed: () {
-                        cartController.addToCart(
-                          CartItem(
-                            name: product.name,
-                            price: product.price,
-                            image: product.imageUrl,
-                            rate: product.price,
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 8),
+                  if (product.stockStatus != 'INSTOCK')
+                    Center(
+                      child: ElevatedButton(
+                        onPressed: () {},
+                        style: ElevatedButton.styleFrom(
+                          // backgroundColor: const Color.fromARGB(255, 231, 235, 231),
+                          shape: RoundedRectangleBorder(
+                            side: BorderSide(
+                              color: Color.fromARGB(255, 224, 240, 225),
+                            ), // Set border color to green
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
+                        child: Text(
+                          'Out of stock',
+                          style: TextStyle(
+                              fontSize: 17.0.sp,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.black),
+                        ),
+                      ),
+                    )
+                  else
+                    Obx(() {
+                      if (cartController.isInCart(product.name)) {
+                        var quantity =
+                            cartController.getProductQuantity(product.name).obs;
+
+                        return Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              CircleAvatar(
+                                backgroundColor: Colors.white,
+                                radius: 20,
+                                // Add green border
+                                foregroundColor: Colors.green,
+                                child: IconButton(
+                                  onPressed: () {
+                                    if (quantity.value > 1) {
+                                      cartController.updateCartItemQuantity(
+                                          product.name, quantity.value - 1);
+                                    } else if (quantity.value == 1) {
+                                      cartController
+                                          .removeFromCart(product.name);
+                                    }
+                                  },
+                                  icon: Icon(
+                                    Icons.remove,
+                                    color: Colors.green,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(width: 10),
+                              Text(
+                                '${quantity.value}',
+                                style: TextStyle(
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.green,
+                                ),
+                              ),
+                              SizedBox(width: 10),
+                              CircleAvatar(
+                                radius: 18,
+                                backgroundColor: Color(0xff93C22F),
+                                child: IconButton(
+                                  onPressed: () {
+                                    cartController.updateCartItemQuantity(
+                                        product.name, quantity.value + 1);
+                                  },
+                                  icon: Icon(
+                                    Icons.add,
+                                    size: 19.sp,
+                                    color: Color.fromARGB(255, 255, 255, 255),
+                                  ),
+                                ),
+                              )
+                            ]);
+                      } else {
+                        return Center(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              cartController.addToCart(
+                                CartItem(
+                                  productId: product.id,
+                                  name: product.name,
+                                  price: product.price,
+                                  image: product.filePath,
+                                  rate: product.price,
+                                  quantity: 1,
+                                ),
+                              );
+                            },
+                            style: ElevatedButton.styleFrom(
+                              // backgroundColor: const Color.fromARGB(255, 231, 235, 231),
+                              shape: RoundedRectangleBorder(
+                                side: BorderSide(
+                                  color: Colors.green,
+                                ), // Set border color to green
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                            ),
+                            child: Text(
+                              'Add to cart',
+                              style: TextStyle(
+                                  fontSize: 17.0.sp,
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.black),
+                            ),
                           ),
                         );
-                        // Add action here
-                      },
-                    ),
-                  ),
-                ),
-              ],
+                      }
+                    })
+                ],
+              ),
             ),
           ],
         ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:organicbazzar/app/config/colors.dart';
 import 'package:organicbazzar/app/config/style.dart';
+import 'package:organicbazzar/app/modules/forget_password/forget_password.dart';
 import 'package:organicbazzar/app/modules/home/home_page.dart';
 import 'package:organicbazzar/app/modules/login/login_controller.dart';
 import 'package:organicbazzar/app/modules/register/register_page.dart';
@@ -25,6 +26,7 @@ class LoginView extends StatelessWidget {
             child: Padding(
               padding: AppPadding.screenHorizontalPadding,
               child: Form(
+                key: loginController.loginFormKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -89,7 +91,11 @@ class LoginView extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            Get.to(() => ForgetPasswordPage(),
+                                transition: Transition.cupertinoDialog,
+                                duration: pageTransitionDuration);
+                          },
                           child: Text("Forgot Password?",
                               style: TextStyle(
                                 color: const Color(0xff6A707C),
@@ -99,14 +105,12 @@ class LoginView extends StatelessWidget {
                       ),
                     ),
                     CustomButton(
-                      buttonColor: AppColor.buttonColor,
+                      buttonColor: AppColor.primaryColor,
                       textColor: Colors.white,
                       text: "Login",
                       onPressed: () {
                         FocusScope.of(context).unfocus();
-                        Get.to(() => HomePage(),
-                            transition: Transition.cupertinoDialog,
-                            duration: pageTransitionDuration);
+                        loginController.loginUser(context);
                       },
                       isLoading: false,
                     ),
@@ -167,7 +171,7 @@ class LoginView extends StatelessWidget {
                             "Register",
                             style: TextStyle(
                               fontSize: 17.sp,
-                              color: AppColor.buttonColor,
+                              color: AppColor.primaryColor,
                               fontWeight: FontWeight.bold,
                             ),
                           ),

@@ -5,6 +5,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:organicbazzar/app/config/colors.dart';
 import 'package:organicbazzar/app/modules/cart/cart_controller.dart';
 import 'package:organicbazzar/app/modules/cart/cart_page.dart';
+import 'package:organicbazzar/app/modules/login/login_controller.dart';
 import 'package:organicbazzar/app/modules/notificaiton/notification_page.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
@@ -14,6 +15,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   CustomAppBar({required this.name, required this.location});
   final cartControler = Get.put(CartController());
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -28,12 +30,14 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             children: [
               Row(
                 children: [
-                  IconButton(
-                    icon: Icon(Icons.menu, color: Colors.black),
-                    onPressed: () {
-                      Scaffold.of(context)
-                          .openDrawer(); // Use the obtained context
-                    },
+                  CircleAvatar(
+                    backgroundColor: Colors.white,
+                    child: IconButton(
+                      icon: Icon(Icons.menu, color: Colors.black),
+                      onPressed: () {
+                        Scaffold.of(context).openDrawer();
+                      },
+                    ),
                   ),
                   SizedBox(width: 2.w),
                   Column(

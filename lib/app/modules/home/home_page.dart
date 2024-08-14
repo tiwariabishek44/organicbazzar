@@ -1,51 +1,81 @@
 import 'package:flutter/material.dart';
-import 'package:organicbazzar/app/config/colors.dart';
+import 'package:get/get.dart';
 import 'package:organicbazzar/app/config/style.dart';
-import 'package:organicbazzar/app/modules/home/utils/category.dart';
-import 'package:organicbazzar/app/modules/home/utils/our_Prouduct_section.dart';
-import 'package:organicbazzar/app/modules/home/utils/profile.dart';
-import 'package:organicbazzar/app/modules/home/utils/recent.dart';
-import 'package:organicbazzar/app/modules/home/utils/custom_appbar.dart';
+import 'package:organicbazzar/app/modules/home/utils/promotion_banner.dart';
+import 'package:organicbazzar/app/modules/latest_product/latest_product.dart';
+import 'package:organicbazzar/app/modules/latest_product/latest_proudct_controller.dart';
+import 'package:organicbazzar/app/modules/login/login_controller.dart';
+import 'package:organicbazzar/app/modules/our_product/our_product.dart';
+import 'package:organicbazzar/app/modules/our_product/our_product_controller.dart';
 import 'package:organicbazzar/app/widget/custom_drawer.dart';
-import 'package:organicbazzar/app/widget/loading_widget.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class HomePage extends StatelessWidget {
+  final ourProductController = Get.put(OurProductController());
+  final latestProductController = Get.put(LatestProductController());
+  final logincontorller = Get.put(LoginController());
+
+  Future<void> _refreshContent() async {
+    await Future.wait([
+      logincontorller.getUserData(),
+      latestProductController.getLatestItems(),
+      ourProductController.getRegularProducts(),
+    ]);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColor.backgroundColor,
-      drawer: const CustomDrawer(),
-      body: Stack(
-        children: [
-          SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Padding(
-                padding: AppPadding.screenHorizontalPadding,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CustomAppBar(
-                      name: 'Robert Martiz',
-                      location: 'Los Angeles',
+    // ignore: deprecated_member_use
+    return WillPopScope(
+        onWillPop: () async {
+          print('Current Route: ${Get.currentRoute}');
+          if (Get.currentRoute == '/') {
+            return await Get.dialog<bool>(
+                  AlertDialog(
+                    title: Text('Exit App'),
+                    content: Text('Are you sure you want to exit?'),
+                    actions: [
+                      TextButton(
+                        child: Text('No'),
+                        onPressed: () => Get.back(result: false),
+                      ),
+                      TextButton(
+                        child: Text('Yes'),
+                        onPressed: () => Get.back(result: true),
+                      ),
+                    ],
+                  ),
+                ) ??
+                false;
+          }
+          return true;
+        },
+        child: Scaffold(
+          backgroundColor: Colors.white,
+          drawer: CustomDrawer(),
+          body: RefreshIndicator(
+            onRefresh: _refreshContent,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  PromotionalBanner(),
+                  Padding(
+                    padding: AppPadding.screenHorizontalPadding,
+                    child: Column(
+                      children: [
+                        SizedBox(height: 4.h),
+                        LatestProduct(),
+                        OurProducts(),
+                        SizedBox(
+                          height: 5.h,
+                        )
+                      ],
                     ),
-                    RecentlyListed(),
-                    // SizedBox(height: 16),
-                    OurProducts()
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
-          // Positioned(
-          //   left: 10.w,
-          //   right: 0,
-          //   top: 40.h, // Use ScreenUtil to adjust according to screen height
-          //   child: LoadingWidget(),
-          // ),
-        ],
-      ),
-    );
+        ));
   }
 }

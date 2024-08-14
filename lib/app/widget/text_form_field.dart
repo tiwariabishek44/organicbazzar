@@ -74,10 +74,10 @@ class TextFormFieldWidget extends StatelessWidget {
             ),
             suffixIcon:
                 showIcons ? suffixIcon : null, // Conditionally show suffixIcon
-            suffixIconColor: const Color.fromARGB(255, 0, 0, 0),
+            suffixIconColor: Color(0xff93C22F),
             prefixIcon:
                 showIcons ? prefixIcon : null, // Conditionally show prefixIcon
-            prefixIconColor: Color.fromARGB(255, 0, 0, 0),
+            prefixIconColor: Color(0xff93C22F),
             errorBorder: const OutlineInputBorder(
               borderSide: BorderSide(
                 color: Colors.transparent,

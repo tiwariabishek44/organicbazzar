@@ -1,31 +1,50 @@
-class Cart {
-  final int id;
+class CartItem {
+  final int productId;
   final String name;
   final double price;
-  int quantity;
+  final int quantity;
+  final String image;
+  final double rate;
 
-  Cart({
-    required this.id,
+  CartItem({
+    required this.productId,
     required this.name,
     required this.price,
     this.quantity = 1,
+    required this.image,
+    required this.rate,
   });
 
-  factory Cart.fromJson(Map<String, dynamic> json) {
-    return Cart(
-      id: json['id'],
+  factory CartItem.fromJson(Map<String, dynamic> json) {
+    return CartItem(
+      productId: json['productId'],
       name: json['name'],
       price: json['price'],
-      quantity: json['quantity'] ?? 1,
+      quantity: json['quantity'],
+      image: json['image'],
+      rate: json['rate'],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
+      'productId': productId,
       'name': name,
       'price': price,
       'quantity': quantity,
+      'image': image,
+      'rate': rate,
     };
+  }
+
+  CartItem copyWith({int? quantity}) {
+    return CartItem(
+      productId: this.productId,
+      name: this.name,
+      price: this.price,
+      quantity: quantity ?? this.quantity,
+      image: this.image,
+      rate: this.rate,
+    );
   }
 }

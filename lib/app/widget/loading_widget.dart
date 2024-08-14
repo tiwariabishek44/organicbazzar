@@ -22,9 +22,9 @@ class LoadingWidget extends StatelessWidget {
           ),
         ),
         // Loading indicator
-        Center(
+        const Center(
             child: SpinKitFadingCircle(
-          color: Color.fromARGB(255, 0, 173, 0),
+          color: AppColor.primaryColor,
         )),
       ],
     );

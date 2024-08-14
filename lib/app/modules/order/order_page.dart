@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:organicbazzar/app/config/colors.dart';
 import 'package:organicbazzar/app/config/style.dart';
 import 'package:organicbazzar/app/modules/order/utils/all_order_tab.dart';
-import 'package:organicbazzar/app/modules/order/utils/history_order.dart';
-import 'package:organicbazzar/app/modules/order/utils/order_tile.dart';
+import 'package:organicbazzar/app/modules/order_history.dart/history_order.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class OrderPage extends StatefulWidget {
@@ -13,121 +12,81 @@ class OrderPage extends StatefulWidget {
   State<OrderPage> createState() => _OrderPageState();
 }
 
-class _OrderPageState extends State<OrderPage>
-    with SingleTickerProviderStateMixin {
-  @override
-  late TabController _tabController;
-  bool _isAllOrdersTabActive = true;
-  bool _isHistoryTabActive = false;
-  void initState() {
-    super.initState();
-    _tabController = TabController(length: 2, vsync: this);
-    _tabController.addListener(() {
-      if (!_tabController.indexIsChanging) {
-        setState(() {
-          if (_tabController.index == 0) {
-            _isAllOrdersTabActive = true;
-            _isHistoryTabActive = false;
-          } else {
-            _isAllOrdersTabActive = false;
-            _isHistoryTabActive = true;
-          }
-        });
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
-  }
+class _OrderPageState extends State<OrderPage> {
+  int _selectedIndex = 0;
+  final List<String> _categories = [
+    'All Orders',
+    'History',
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.backgroundColor,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        titleSpacing: 24.0,
-        title: Padding(
-          padding: EdgeInsets.only(top: 16.0),
-          child: Text(
-            'Orders',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 21.sp),
-          ),
-        ),
-        bottom: PreferredSize(
-          preferredSize: Size.fromHeight(50.0),
-          child: TabBar(
-            controller: _tabController,
-            tabs: [
-              Tab(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.receipt, size: 22.sp, color: Colors.black),
-                    SizedBox(width: 8),
-                    Text('All orders',
-                        style: TextStyle(color: Colors.black, fontSize: 17.sp)),
-                  ],
+      body: SafeArea(
+        child: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              floating: true,
+              pinned: true,
+              expandedHeight: 120.0,
+              scrolledUnderElevation: 0,
+              backgroundColor: AppColor.backgroundColor,
+              flexibleSpace: FlexibleSpaceBar(
+                title: Text(
+                  'My Orders',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 22.sp,
+                  ),
                 ),
+                centerTitle: false,
               ),
-              Tab(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.history, size: 22.sp, color: Colors.black),
-                    SizedBox(width: 8),
-                    Text('History',
-                        style: TextStyle(color: Colors.black, fontSize: 17.sp)),
-                  ],
-                ),
-              ),
-            ],
-            indicator: BoxDecoration(
-              border: Border(
-                bottom: BorderSide(
-                  color: Colors.black,
-                  width: 4.0,
+            ),
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 4.w),
+                child: SizedBox(
+                  height: 40,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: _categories.length,
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _selectedIndex = index;
+                          });
+                        },
+                        child: Container(
+                          margin: EdgeInsets.symmetric(horizontal: 8),
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          decoration: BoxDecoration(
+                            color: _selectedIndex == index
+                                ? AppColor.primaryColor
+                                : Colors.grey[200],
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Text(
+                            _categories[index],
+                            style: TextStyle(
+                              color: _selectedIndex == index
+                                  ? Colors.white
+                                  : Colors.black,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 16.sp,
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
                 ),
               ),
             ),
-            indicatorSize: TabBarIndicatorSize.tab,
-            indicatorWeight: 4.0,
-            labelColor: Colors.black,
-            splashFactory: NoSplash.splashFactory,
-            overlayColor: MaterialStateProperty.resolveWith<Color?>(
-              (Set<MaterialState> states) {
-                if (states.contains(MaterialState.pressed) ||
-                    states.contains(MaterialState.focused) ||
-                    states.contains(MaterialState.hovered)) {
-                  return Colors.grey.withOpacity(0.2);
-                }
-                return null;
-              },
-            ),
-          ),
-        ),
-      ),
-      body: NotificationListener<ScrollNotification>(
-        onNotification: (scrollNotification) => true,
-        child: TabBarView(
-          controller: _tabController,
-          physics: NeverScrollableScrollPhysics(),
-          children: [
-            _isAllOrdersTabActive
-                ? Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: AllOrdersTab(),
-                  )
-                : SizedBox.shrink(),
-            _isHistoryTabActive
-                ? Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: HistoryOrderTAb(),
-                  )
-                : SizedBox.shrink(),
+            _selectedIndex == 0 ? AllOrdersTab() : HistoryOrderTAb(),
           ],
         ),
       ),

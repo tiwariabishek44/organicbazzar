@@ -1,0 +1,27 @@
+{
+  "name": "organicbazzar",
+  "version": "1.0.0",
+  "description": "A new Flutter project.",
+  "main": "server/server.js",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "scripts": {
+    "start": "node server/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tiwariabishek44/organicbazzar.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tiwariabishek44/organicbazzar/issues"
+  },
+  "homepage": "https://github.com/tiwariabishek44/organicbazzar#readme",
+  "dependencies": {
+    "express": "^4.19.2",
+    "firebase-admin": "^12.2.0"
+  }
+}
