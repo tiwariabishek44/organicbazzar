@@ -1,4 +1,4 @@
-package com.example.organicbazzar
+package com.businessitpartners.organicbazzar
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -37,17 +37,17 @@ class OrderSummary extends StatelessWidget {
                 ),
               ],
             ),
-            Divider(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('Delivery'),
-                Text(
-                  '\Rs $deliveryFee',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ],
-            ),
+            // Divider(),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //   children: [
+            //     Text('Delivery'),
+            //     Text(
+            //       '\Rs $deliveryFee',
+            //       style: TextStyle(color: Colors.white),
+            //     ),
+            //   ],
+            // ),
             Divider(),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

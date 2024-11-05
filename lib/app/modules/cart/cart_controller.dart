@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -113,6 +114,7 @@ class CartController extends GetxController {
   }
 
   var orderLoading = false.obs;
+
   Future<void> createOrder() async {
     try {
       orderLoading.value = true;
@@ -124,59 +126,52 @@ class CartController extends GetxController {
         );
       }).toList();
 
-      // Define your API endpoint
       var apiUrl = Uri.parse(ApiEndpoints.makeOrder);
-
-      // // Prepare the payload
-      // List<Map<String, dynamic>> jsonList =
-      //     products.map((item) => item.toJson()).toList();
-
       String body = json.encode(products);
 
-      // Send POST request
-      var response = await httpClient
-          .post(
-            apiUrl,
-            headers: {
-              'Content-Type':
-                  'application/json', // Adjust content type if necessary
-            },
-            body: body,
-          )
-          .timeout(Duration(minutes: 1));
+      var response = await _sendRequest(apiUrl, body);
 
-      // Handle response
       if (response.statusCode == 200) {
         log('Order placed successfully');
-
         orderLoading.value = false;
         Get.off(() => SuccessPage());
-        //timer of 1 second
+
         Future.delayed(Duration(seconds: 1), () {
           clearCart();
         });
       } else {
-        orderLoading.value = false;
-        // make a scaffold messanger to show the error
-        ScaffoldMessenger.of(Get.context!).showSnackBar(
-          SnackBar(
-            content: Text('Failed to place order'),
-            backgroundColor: Colors.red,
-            duration: Duration(seconds: 1),
-          ),
-        );
-        log('Failed to place order: ${response.statusCode}');
+        _showError('Failed to place order');
       }
     } catch (e) {
+      _showError('Error placing order: $e');
+    } finally {
       orderLoading.value = false;
-      log('Error placing order: $e');
-      ScaffoldMessenger.of(Get.context!).showSnackBar(
-        SnackBar(
-          content: Text('Error placing order: $e'),
-          backgroundColor: Colors.red,
-          duration: Duration(seconds: 1),
-        ),
-      );
     }
+  }
+
+  Future<http.Response> _sendRequest(Uri apiUrl, String body) async {
+    try {
+      return await httpClient
+          .post(
+            apiUrl,
+            headers: {'Content-Type': 'application/json'},
+            body: body,
+          )
+          .timeout(Duration(minutes: 1));
+    } catch (e) {
+      log('Error during HTTP request: $e');
+      throw e; // Re-throw to handle in createOrder method
+    }
+  }
+
+  void _showError(String message) {
+    ScaffoldMessenger.of(Get.context!).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.red,
+        duration: Duration(seconds: 1),
+      ),
+    );
+    log(message);
   }
 }

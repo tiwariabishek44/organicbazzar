@@ -1,10 +1,30 @@
 {
   "project_info": {
     "project_number": "296348372039",
+    "firebase_url": "https://organicbazzar-18d9f-default-rtdb.asia-southeast1.firebasedatabase.app",
     "project_id": "organicbazzar-18d9f",
     "storage_bucket": "organicbazzar-18d9f.appspot.com"
   },
   "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:296348372039:android:ff1a14bdf5f3573860b562",
+        "android_client_info": {
+          "package_name": "com.businessitpartners.organicbazzar"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDiusm8gdQ7rFKymRH33hNVbG2uTjoVMZg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
     {
       "client_info": {
         "mobilesdk_app_id": "1:296348372039:android:627744bb20245c4760b562",

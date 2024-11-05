@@ -107,12 +107,12 @@ class CustomDrawer extends StatelessWidget {
         //   () =>
         //       Get.to(() => ContactUsPage(), transition: Transition.rightToLeft),
         // ),
-        _buildNavItem(
-          'Privacy Policy',
-          Icons.privacy_tip_outlined,
-          () => Get.to(() => PrivacyPolicyPage(),
-              transition: Transition.cupertinoDialog),
-        ),
+        // _buildNavItem(
+        //   'Privacy Policy',
+        //   Icons.privacy_tip_outlined,
+        //   () => Get.to(() => PrivacyPolicyPage(),
+        //       transition: Transition.cupertinoDialog),
+        // ),
         _buildNavItem(
           'About Us',
           Icons.info_outline,

@@ -123,7 +123,7 @@ class CartPage extends StatelessWidget {
                 OrderSummary(
                   orderTotal: cartController.calculateTotalPrice(),
                   deliveryFee: 15.00,
-                  total: cartController.calculateTotalPrice() + 15.00,
+                  total: cartController.calculateTotalPrice(),
                 ),
                 SizedBox(height: 20),
                 _buildCheckoutButton(),

@@ -32,8 +32,7 @@ class OrderDetailedController extends GetxController {
 
   Future<void> cancelOrder(int orderId) async {
     final url =
-        "https://businessitpartners.website/api/ecommerce/user/cancel-order/$orderId";
-
+        "https://shesmaticoop.com/api/ecommerce/user/cancel-order/$orderId";
     try {
       isLoading(true);
       log("Attempting to cancel order $orderId");

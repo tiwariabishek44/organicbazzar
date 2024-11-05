@@ -24,38 +24,38 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   void _checkNotificationPermission() async {
     final status = await Permission.notification.status;
-    if (status.isDenied) {
-      _showNotificationPermissionDialog();
-    }
+    // if (status.isDenied) {
+    //   _showNotificationPermissionDialog();
+    // }
   }
 
-  void _showNotificationPermissionDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("Enable Notifications"),
-          content: Text(
-              "Would you like to enable notifications for a better experience?"),
-          actions: <Widget>[
-            TextButton(
-              child: const Text("No Thanks"),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: Text("Allow"),
-              onPressed: () async {
-                Navigator.of(context).pop();
-                openAppSettings();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
+  // void _showNotificationPermissionDialog() {
+  //   showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return AlertDialog(
+  //         title: Text("Enable Notifications"),
+  //         content: Text(
+  //             "Would you like to enable notifications for a better experience?"),
+  //         actions: <Widget>[
+  //           TextButton(
+  //             child: const Text("No Thanks"),
+  //             onPressed: () {
+  //               Navigator.of(context).pop();
+  //             },
+  //           ),
+  //           TextButton(
+  //             child: Text("Allow"),
+  //             onPressed: () async {
+  //               Navigator.of(context).pop();
+  //               openAppSettings();
+  //             },
+  //           ),
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
 
   void _proceedToNextPage() {
     loginController.registerDevice();

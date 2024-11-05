@@ -110,7 +110,8 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
-
+//  it say that the code ofthe version has already been updated and the code is not updated so it is not working    so i have to update the code
+//  so i have to update the code   in the play stroe os i am doing he nonsense things here
   @override
   Widget build(BuildContext context) {
     return ResponsiveSizer(

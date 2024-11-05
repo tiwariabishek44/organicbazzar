@@ -1,14 +1,9 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:organicbazzar/app/modules/order/order_controller.dart';
-import 'package:organicbazzar/app/modules/order/order_page.dart';
 import 'package:organicbazzar/app/modules/order/utils/no_order.dart';
 import 'package:organicbazzar/app/modules/order/utils/order_tile.dart';
 import 'package:organicbazzar/app/modules/order/utils/order_tile_shrimmer.dart';
 import 'package:organicbazzar/app/modules/order_history.dart/order_history_controller.dart';
-import 'package:responsive_sizer/responsive_sizer.dart';
 
 class HistoryOrderTAb extends StatelessWidget {
   final orderHIstoryContorller = Get.put(OrderHistoryController());
@@ -44,7 +39,8 @@ class HistoryOrderTAb extends StatelessWidget {
             return SliverToBoxAdapter(
               child: SizedBox(
                 height: MediaQuery.of(context).size.height -
-                    20, // Adjust this value as needed
+                    200, // Adjust this value as needed
+                child: NoOrdersPage(),
               ),
             );
           }
