@@ -14,10 +14,10 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDiusm8gdQ7rFKymRH33hNVbG2uTjoVMZg',
-    appId: '1:296348372039:android:627744bb20245c4760b562',
-    messagingSenderId: '296348372039',
-    projectId: 'organicbazzar-18d9f',
-    storageBucket: 'organicbazzar-18d9f.appspot.com',
+    apiKey: 'AIzaSyDL8wQqC78XFnRIsAfi2SO2ub0yCuooUMU',
+    appId: '1:879371568084:android:b5ec97c537723d5694cc41',
+    messagingSenderId: '879371568084',
+    projectId: 'organicbazzars',
+    storageBucket: 'organicbazzars.firebasestorage.app',
   );
 }

@@ -51,7 +51,7 @@ class RegisterController extends GetxController {
         "name": nameController.text.trim(),
         "email": emailController.text.trim(),
         "phone": mobileNumberController.text.trim(),
-        "address": "ssiisi",
+        "address": addressController.text.trim(),
         "password": passwordController.text.trim()
       };
 

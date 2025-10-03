@@ -18,15 +18,22 @@ import 'app/local notification/push_notifications.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
 
-// Function to listen to background notifications
+@pragma('vm:entry-point')
 Future<void> _firebaseBackgroundMessage(RemoteMessage message) async {
-  if (message.notification != null) {
-    print("Some notification received");
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  if (message.notification != null && !kIsWeb) {
+    await PushNotifications.showBackgroundNotification(
+      title: message.notification?.title ?? '',
+      body: message.notification?.body ?? '',
+      payload: jsonEncode(message.data),
+    );
   }
 }
 
-// Handle notifications in the foreground on web platform
-void showNotification({required String title, required String body}) {
+void showWebNotification({required String title, required String body}) {
   showDialog(
     context: navigatorKey.currentContext!,
     builder: (context) => AlertDialog(
@@ -34,10 +41,8 @@ void showNotification({required String title, required String body}) {
       content: Text(body),
       actions: [
         TextButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: Text("Ok"),
+          onPressed: () => Navigator.pop(context),
+          child: const Text("Ok"),
         ),
       ],
     ),
@@ -45,33 +50,31 @@ void showNotification({required String title, required String body}) {
 }
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   Get.put(ConnectivityController());
   await GetStorage.init();
-
   await dotenv.load(fileName: ".env");
 
-  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  // Handle background notification tap
+  // Initialize notifications
+  if (!kIsWeb) {
+    await PushNotifications.localNotiInit();
+  }
+  await PushNotifications.init();
+
+  // Set background message handler
+  FirebaseMessaging.onBackgroundMessage(_firebaseBackgroundMessage);
+
+  // Handle notification tap when app is in background
   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
     if (message.notification != null) {
-      log("Background Notification Tapped");
       navigatorKey.currentState!.pushNamed("/message", arguments: message);
     }
   });
-
-  PushNotifications.init();
-
-  // Only initialize local notifications if platform is not web
-  if (!kIsWeb) {
-    PushNotifications.localNotiInit();
-  }
-
-  // Listen to background notifications
-  FirebaseMessaging.onBackgroundMessage(_firebaseBackgroundMessage);
 
   // Handle foreground notifications
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
@@ -79,7 +82,7 @@ void main() async {
     log("Got a message in foreground");
     if (message.notification != null) {
       if (kIsWeb) {
-        showNotification(
+        showWebNotification(
           title: message.notification!.title!,
           body: message.notification!.body!,
         );
@@ -93,13 +96,12 @@ void main() async {
     }
   });
 
-  // Handle notifications when the app is launched from a terminated state
+  // Handle terminated state notifications
   final RemoteMessage? initialMessage =
       await FirebaseMessaging.instance.getInitialMessage();
-
   if (initialMessage != null) {
     log("Launched from terminated state");
-    Future.delayed(Duration(seconds: 1), () {
+    Future.delayed(const Duration(seconds: 1), () {
       navigatorKey.currentState!
           .pushNamed("/message", arguments: initialMessage);
     });

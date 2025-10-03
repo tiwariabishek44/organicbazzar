@@ -1,222 +1,246 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:organicbazzar/app/config/colors.dart';
-import 'package:organicbazzar/app/config/style.dart';
-import 'package:organicbazzar/app/modules/contact_us/contact_us_controller.dart';
-import 'package:organicbazzar/app/widget/custom_button.dart';
-import 'package:organicbazzar/app/widget/text_form_field.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
-class ContactUsPage extends StatelessWidget {
-  final contactUsController = Get.put(ContactUsController());
+class ContactUsPage extends StatefulWidget {
+  const ContactUsPage({Key? key}) : super(key: key);
+
+  @override
+  _ContactUsPageState createState() => _ContactUsPageState();
+}
+
+class _ContactUsPageState extends State<ContactUsPage> {
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _messageController = TextEditingController();
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
+    _messageController.dispose();
+    super.dispose();
+  }
+
+  void _submitForm() {
+    if (_formKey.currentState!.validate()) {
+      // TODO: Implement your form submission logic here
+      Get.snackbar(
+        'Success',
+        'Message sent successfully!',
+        backgroundColor: Colors.green[100],
+        colorText: Colors.green[900],
+        duration: const Duration(seconds: 3),
+      );
+
+      // Clear form after submission
+      _nameController.clear();
+      _emailController.clear();
+      _messageController.clear();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Contact Us'),
+      appBar: AppBar(
+        title: Text(
+          'Contact Us',
+          style: GoogleFonts.poppins(
+            color: Colors.black87,
+            fontWeight: FontWeight.w600,
+          ),
         ),
-        body: Padding(
-          padding: AppPadding.screenHorizontalPadding,
-          child: ListView(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios, color: Colors.black87),
+          onPressed: () => Get.back(),
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.all(4.w),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: AppPadding.screenHorizontalPadding,
-                child: Container(
-                  padding: const EdgeInsets.all(2.0),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(12),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Color.fromARGB(31, 0, 0, 0),
-                        blurRadius: 8,
-                        offset: Offset(2, 2),
-                      ),
-                    ],
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(13.0),
-                    child: Column(children: [
-                      TextFormFieldWidget(
-                        showIcons: false,
-                        textInputType: TextInputType.text,
-                        hintText: "Name",
-                        controller: contactUsController.nameController,
-                        validatorFunction: (value) {
-                          if (value.isEmpty) {
-                            return "Name  is required";
-                          }
-                          return null;
-                        },
-                        actionKeyboard: TextInputAction.next,
-                        prefixIcon: const Icon(Icons.person_outline),
-                      ),
-                      SizedBox(
-                        height: 3.h,
-                      ),
-                      TextFormFieldWidget(
-                        showIcons: false,
-                        textInputType: TextInputType.text,
-                        hintText: "Phone",
-                        controller: contactUsController.phoneContorlller,
-                        validatorFunction: (value) {
-                          if (value.isEmpty) {
-                            return "Email is required";
-                          }
-                          return null;
-                        },
-                        actionKeyboard: TextInputAction.next,
-                        prefixIcon: const Icon(Icons.phone),
-                      ),
-                      SizedBox(
-                        height: 3.h,
-                      ),
-                      TextFormFieldWidget(
-                        showIcons: false,
-                        textInputType: TextInputType.text,
-                        hintText: "Email",
-                        controller: contactUsController.nameController,
-                        validatorFunction: (value) {
-                          if (value.isEmpty) {
-                            return "Email is required";
-                          }
-                          return null;
-                        },
-                        actionKeyboard: TextInputAction.next,
-                        prefixIcon: const Icon(Icons.email_outlined),
-                      ),
-                      SizedBox(
-                        height: 3.h,
-                      ),
-                      TextField(
-                        controller: contactUsController.nameController,
-                        cursorColor: Colors.black,
-                        textAlign: TextAlign.left,
-                        maxLines:
-                            4, // This will make the TextField 4 lines tall
-
-                        decoration: InputDecoration(
-                          labelStyle: TextStyle(
-                            color: Colors.black,
-                            fontSize: 18.sp,
-                            fontWeight: FontWeight.w400,
-                          ),
-                          errorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.transparent,
-                            ),
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                          ),
-                          focusedErrorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.transparent,
-                            ),
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.transparent,
-                            ),
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.black,
-                            ),
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                          ),
-                          contentPadding: EdgeInsets.all(2.h),
-                          filled: true,
-                          fillColor: Color.fromARGB(24, 152, 151, 151),
-                          border: InputBorder.none,
-                          hintText: 'Enter your message',
-                          hintStyle: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 18.sp,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                        style: TextStyle(color: Colors.black),
-                      ),
-                      SizedBox(
-                        height: 3.h,
-                      ),
-                      CustomButton(
-                        buttonColor: AppColor.primaryColor,
-                        textColor: AppColor.backgroundColor,
-                        text: "SUBMIT",
-                        onPressed: () {
-                          FocusScope.of(context).unfocus();
-                        },
-                        isLoading: false,
-                      ),
-                    ]),
-                  ),
+              // Contact Information Section
+              Container(
+                padding: EdgeInsets.all(4.w),
+                decoration: BoxDecoration(
+                  color: AppColor.primaryColor.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(12),
                 ),
-              ),
-              SizedBox(
-                height: 4.h,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(1.0),
-                child: Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(12),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black12,
-                        blurRadius: 8,
-                        offset: Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Contact Admin Information:',
-                            style: TextStyle(
-                              fontSize: 20, // Increase the font size
-                              color: Colors.blue,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          SizedBox(height: 8),
-                          Text(
-                            'Phone: +973838838383',
-                            style: TextStyle(
-                              color: Colors.grey[800], // Grey toward black
-                            ),
-                          ),
-                          Text(
-                            'Email: slls@gmail.com',
-                            style: TextStyle(
-                              color: Colors.grey[800], // Grey toward black
-                            ),
-                          ),
-                          Text(
-                            'Address: timkune-32, kathmandu',
-                            style: TextStyle(
-                              color: Colors.grey[800], // Grey toward black
-                            ),
-                          ),
-                        ],
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Get in Touch',
+                      style: GoogleFonts.poppins(
+                        fontSize: 20.sp,
+                        fontWeight: FontWeight.bold,
+                        color: AppColor.primaryColor,
                       ),
                     ),
-                  ),
+                    SizedBox(height: 2.h),
+                    _buildContactItem(
+                      Icons.phone,
+                      'Phone',
+                      '+977 1234567890',
+                    ),
+                    _buildContactItem(
+                      Icons.email,
+                      'Email',
+                      'info@organicbazzar.com',
+                    ),
+                    _buildContactItem(
+                      Icons.location_on,
+                      'Address',
+                      'Kathmandu, Nepal',
+                    ),
+                  ],
                 ),
-              )
+              ),
+
+              SizedBox(height: 4.h),
+
+              // Contact Form
+              Text(
+                'Send us a Message',
+                style: GoogleFonts.poppins(
+                  fontSize: 20.sp,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
+              ),
+              SizedBox(height: 2.h),
+              Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    TextFormField(
+                      controller: _nameController,
+                      decoration: _buildInputDecoration('Full Name'),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your name';
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: 2.h),
+                    TextFormField(
+                      controller: _emailController,
+                      decoration: _buildInputDecoration('Email Address'),
+                      keyboardType: TextInputType.emailAddress,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your email';
+                        }
+                        if (!GetUtils.isEmail(value)) {
+                          return 'Please enter a valid email';
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: 2.h),
+                    TextFormField(
+                      controller: _messageController,
+                      decoration: _buildInputDecoration('Message'),
+                      maxLines: 4,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your message';
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: 3.h),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 6.h,
+                      child: ElevatedButton(
+                        onPressed: _submitForm,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColor.primaryColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        child: Text(
+                          'Send Message',
+                          style: GoogleFonts.poppins(
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
-        ));
+        ),
+      ),
+    );
+  }
+
+  Widget _buildContactItem(IconData icon, String title, String content) {
+    return Padding(
+      padding: EdgeInsets.only(bottom: 2.h),
+      child: Row(
+        children: [
+          Icon(icon, color: AppColor.primaryColor),
+          SizedBox(width: 3.w),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: GoogleFonts.poppins(
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black87,
+                ),
+              ),
+              Text(
+                content,
+                style: GoogleFonts.poppins(
+                  color: Colors.black54,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  InputDecoration _buildInputDecoration(String label) {
+    return InputDecoration(
+      labelText: label,
+      labelStyle: GoogleFonts.poppins(color: Colors.black54),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide: BorderSide(color: Colors.grey[300]!),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide: BorderSide(color: Colors.grey[300]!),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide: BorderSide(color: AppColor.primaryColor),
+      ),
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide: BorderSide(color: Colors.red),
+      ),
+      filled: true,
+      fillColor: Colors.white,
+    );
   }
 }
